@@ -1,52 +1,50 @@
-const express = require('express');
-const session = require('express-session');
-const path = require('path');
-const pageRouter = require('./routes/pages');
-const app = express();
-
-// for body parser. to collect data that sent from the client.
-app.use(express.urlencoded( { extended : false}));
-
-
-// Serve static files. CSS, Images, JS files ... etc
+/**
+* Module dependencies.
+*/
+var express = require('express')
+  , routes = require('./routes')
+  , user = require('./routes/user')
+  , http = require('http')
+  , path = require('path');
+//var methodOverride = require('method-override');
+var session = require('express-session');
+var app = express();
+var mysql      = require('mysql');
+var bodyParser=require("body-parser");
+var connection = mysql.createConnection({
+              host     : 'localhost',
+              user     : 'root',
+              password : 'root',
+              database : 'test'
+            });
+ 
+connection.connect();
+ 
+global.db = connection;
+ 
+// all environments
+app.set('port', process.env.PORT || 8080);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
-
-// Template engine. PUG
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-// session
 app.use(session({
-    secret:'youtube_video',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        maxAge: 60 * 1000 * 30
-    }
-}));
-
-
-// Routers
-app.use('/', pageRouter);
-
-
-// Errors => page not found 404
-app.use((req, res, next) =>  {
-    var err = new Error('Page not found');
-    err.status = 404;
-    next(err);
-})
-
-// Handling errors (send them to the client)
-app.use((err, req, res, next) => {
-    res.status(err.status || 500);
-    res.send(err.message);
-});
-
-// Setting up the server
-app.listen(3000, () => {
-    console.log('Server is running on port 3000...');
-});
-
-module.exports = app;
+              secret: 'keyboard cat',
+              resave: false,
+              saveUninitialized: true,
+              cookie: { maxAge: 60000 }
+            }))
+ 
+// development only
+ 
+app.get('/', routes.index);//call for main index page
+app.get('/signup', user.signup);//call for signup page
+app.post('/signup', user.signup);//call for signup post 
+app.get('/login', routes.index);//call for login page
+app.post('/login', user.login);//call for login post
+app.get('/home/dashboard', user.dashboard);//call for dashboard page after login
+app.get('/home/logout', user.logout);//call for logout
+app.get('/home/profile',user.profile);//to render users profile
+//Middleware
+app.listen(8080)

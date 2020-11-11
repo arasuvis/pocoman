@@ -1,27 +1,23 @@
 {
-  "name": "youtube",
+  "name": "node-restapi",
   "version": "1.0.0",
-  "engines": {
-    "node": "12.x"
-  },
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+    "name": "Adam",
+    "email": "jstutorials1@gmail.com",
+    "url": "http://www.js-tutorials.com/"
+  },
+  "license": "MIT",
   "dependencies": {
-    "bcrypt": "^3.0.5",
-    "express": "^4.16.4",
-    "express-session": "^1.15.6",
-    "mysql": "^2.16.0",
-    "pug": "^2.0.3",
-    "util.promisify": "^1.0.0"
-  },
-  "devDependencies": {
-    "nodemon": "^1.18.10"
+    "body-parser": "^1.16.1",
+    "ejs": "^2.5.6",
+    "express": "^4.14.1",
+    "express-session": "^1.15.1",
+    "mysql": "^2.13.0",
+    "req-flash": "0.0.3"
   }
 }
